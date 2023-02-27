@@ -5,9 +5,11 @@ import Next from "./components/Next";
 import Score from "./components/Score";
 import "./Quiz.css";
 import StartQuiz from "./components/StartQuiz";
+import Previous from "./components/Previous";
 
 const Quiz = () => {
   const [quizState, dispatch] = useContext(QuizContext);
+  console.log('quizState',quizState)
   return (
     <>
     {
@@ -31,6 +33,7 @@ const Quiz = () => {
             </div>
             <Question />
             <div className="buttonContainer">
+              <Previous />
               <Next />
             </div>
           </div>

@@ -13,7 +13,7 @@ const Question = () => {
         <div className="optionsContainer">
         {
             quizState?.options?.map(((optionText,index)=>{
-                return <Option key={index} optionText={optionText} index={index} onSelectOption={(option)=>dispatch({type:'SELECT_OPTION',payload:option})} currentAnswer={quizState.currentAnswer}/>
+                return <Option key={index} optionText={optionText} currentAnswerArr={quizState.currentAnswerArr} index={index} onSelectOption={(option)=>dispatch({type:'SELECT_OPTION',payload:option})} currentAnswer={quizState.currentAnswer}/>
             }))
         }
         </div>

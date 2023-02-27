@@ -10,7 +10,8 @@ const initialState = {
     correctAnswerCount:0, 
     options:shuffledOptions(questions[0]),
     currentAnswer:'',
-    startQuiz:false
+    startQuiz:false,
+    currentAnswerArr:[]
 };
 
 const reducer = (state, action) => {
@@ -26,18 +27,50 @@ const reducer = (state, action) => {
             const currentQuestionIndex = showResults ? state.currentQuestionIndex : state.currentQuestionIndex + 1
             const options = shuffledOptions(questions[currentQuestionIndex])
             
-            const correctAnswerCount = state.currentAnswer === state.questions[state.currentQuestionIndex].correctAnswer ? state.correctAnswerCount + 1 : state.correctAnswerCount
+            let correctAnswerCount = 0
+            if(state.currentAnswer === state.questions[state.currentQuestionIndex].correctAnswer){
+                correctAnswerCount = state.correctAnswerCount + 1 
+            }else{
+                correctAnswerCount = state.correctAnswerCount
+            }
+
+            state.currentAnswerArr[state.currentQuestionIndex] = state.currentAnswer
+            
+            const currentAnswer = (state.currentAnswerArr[currentQuestionIndex] !== "" && state.currentAnswerArr[currentQuestionIndex] !== undefined && state.currentAnswerArr[currentQuestionIndex] !== null) ? state.currentAnswerArr[currentQuestionIndex] : "" 
             return {
                 ...state,
                 currentQuestionIndex,
                 showResults,
                 options,
-                currentAnswer:"",
+                currentAnswer,
                 correctAnswerCount
             }
         }
+
+        case 'PREVIOUS_QUESTION':{
+            const showResults = state.currentQuestionIndex === state.questions.length
+            console.log(state.currentQuestionIndex,'state.currentQuestionIndex')
+            console.log(state.questions.length - 1,'state.questions.length - 1')
+            const currentQuestionIndex = showResults ? state.currentQuestionIndex : state.currentQuestionIndex - 1
+            const options = shuffledOptions(questions[currentQuestionIndex])
+            
+            const currentAnswer = state.currentAnswerArr[currentQuestionIndex]
+
+            const correctAnswerCount = (currentAnswer && currentAnswer!=="" && currentAnswer!==undefined && currentAnswer!==null) && currentAnswer !== state.currentAnswerArr[currentQuestionIndex] ? state.correctAnswerCount - 1 : state.correctAnswerCount
+
+
+            return {
+                ...state,
+                currentQuestionIndex,
+                showResults,
+                options,
+                currentAnswer,
+                correctAnswerCount,
+                currentAnswerArr:[...state.currentAnswerArr]
+            }
+        }
         case 'RESTART':{
-            return initialState
+            return {...initialState,currentAnswerArr:[]}
         }
         case 'START':{
             return {
